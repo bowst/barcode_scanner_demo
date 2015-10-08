@@ -12,10 +12,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         super.viewDidLoad()
         
         // Allow the view to resize freely
-        self.highlightView.autoresizingMask =   UIViewAutoresizing.FlexibleTopMargin |
-            UIViewAutoresizing.FlexibleBottomMargin |
-            UIViewAutoresizing.FlexibleLeftMargin |
-            UIViewAutoresizing.FlexibleRightMargin
+        self.highlightView.autoresizingMask =   [UIViewAutoresizing.FlexibleTopMargin, UIViewAutoresizing.FlexibleBottomMargin, UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin]
         
         // Select the color you want for the completed scan reticle
         self.highlightView.layer.borderColor = UIColor.greenColor().CGColor
@@ -33,7 +30,13 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         var error : NSError? = nil
         
         
-        let input : AVCaptureDeviceInput? = AVCaptureDeviceInput.deviceInputWithDevice(device, error: &error) as? AVCaptureDeviceInput
+        let input: AVCaptureInput!
+        do {
+            input = try AVCaptureDeviceInput(device: device)
+        } catch let error1 as NSError {
+            error = error1
+            input = nil
+        }
         
         // If our input is not nil then add it to the session, otherwise we're kind of done!
         if input != nil {
@@ -41,7 +44,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
         else {
             // This is fine for a demo, do something real with this in your app. :)
-            println(error)
+            print(error)
         }
         
         let output = AVCaptureMetadataOutput()
@@ -50,7 +53,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         output.metadataObjectTypes = output.availableMetadataObjectTypes
         
         
-        previewLayer = AVCaptureVideoPreviewLayer.layerWithSession(session) as AVCaptureVideoPreviewLayer
+        previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.frame = self.view.bounds
         previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         self.view.layer.addSublayer(previewLayer)
@@ -88,11 +91,11 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             for barcodeType in barCodeTypes {
                 
                 if metadata.type == barcodeType {
-                    barCodeObject = self.previewLayer.transformedMetadataObjectForMetadataObject(metadata as AVMetadataMachineReadableCodeObject)
+                    barCodeObject = self.previewLayer.transformedMetadataObjectForMetadataObject(metadata as! AVMetadataMachineReadableCodeObject)
                     
                     highlightViewRect = barCodeObject.bounds
                     
-                    detectionString = (metadata as AVMetadataMachineReadableCodeObject).stringValue
+                    detectionString = (metadata as! AVMetadataMachineReadableCodeObject).stringValue
                     
                     self.session.stopRunning()
                     break
@@ -101,7 +104,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             }
         }
         
-        println(detectionString)
+        print(detectionString)
         self.highlightView.frame = highlightViewRect
         self.view.bringSubviewToFront(self.highlightView)
         
@@ -109,4 +112,3 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     
 }
-

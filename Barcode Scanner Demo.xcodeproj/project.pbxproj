@@ -156,6 +156,7 @@
 		A2F424851A8E839400E83440 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = Bowst;
 				TargetAttributes = {
@@ -407,6 +408,7 @@
 				A2F424AE1A8E839400E83440 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A2F424AF1A8E839400E83440 /* Build configuration list for PBXNativeTarget "Barcode Scanner DemoTests" */ = {
 			isa = XCConfigurationList;
@@ -415,6 +417,7 @@
 				A2F424B11A8E839400E83440 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
